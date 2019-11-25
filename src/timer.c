@@ -1,8 +1,12 @@
 /* Copyright 2018 SiFive, Inc */
 /* SPDX-License-Identifier: Apache-2.0 */
 
+#ifdef __ICCRISCV__
+#include <time.h>
+#else
 #include <sys/time.h>
 #include <sys/times.h>
+#endif
 #include <metal/cpu.h>
 #include <metal/timer.h>
 #include <metal/machine.h>

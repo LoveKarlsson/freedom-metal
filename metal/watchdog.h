@@ -10,6 +10,11 @@
  * @brief API for configuring watchdog timers
  */
 
+
+#ifdef __ICCRISCV__
+#define __METAL_DT_MAX_WDOGS -1
+#endif
+
 #include <metal/interrupt.h>
 
 struct metal_watchdog;

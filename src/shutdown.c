@@ -3,6 +3,9 @@
 
 #include <metal/machine.h>
 #include <metal/shutdown.h>
+#ifdef __ICCRISCV__
+#include <intrinsics.h>
+#endif
 
 extern __inline__ void __metal_shutdown_exit(const struct __metal_shutdown *sd, int code);
 
@@ -16,7 +19,11 @@ void metal_shutdown(int code)
 void metal_shutdown(int code)
 {
     while (1) {
+#ifdef __ICCRISCV__
+      __no_operation();
+#else
       __asm__ volatile ("nop");
+#endif
     }
 }
 #endif

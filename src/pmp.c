@@ -8,6 +8,10 @@
 #define CONFIG_TO_INT(_config) (*((char *) &(_config)))
 #define INT_TO_CONFIG(_int) (*((struct metal_pmp_config *)(char *) &(_int)))
 
+#ifdef __ICCRISCV__
+#define __asm__ asm
+#endif
+
 struct metal_pmp *metal_pmp_get_device(void)
 {
 #ifdef __METAL_DT_PMP_HANDLE
