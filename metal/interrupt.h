@@ -7,6 +7,11 @@
 /*! @file interrupt.h
  *  @brief API for registering and manipulating interrupts
  */
+#ifdef __ICCRISCV__
+#ifndef interrupt
+#define interrupt _Pragma("type_attribute=__interrupt")
+#endif
+#endif
 
 #include <stddef.h>
 
@@ -457,5 +462,12 @@ __inline__ int _metal_interrupt_command_request(struct metal_interrupt *controll
 {
     return controller->vtable->command_request(controller, cmd, data);
 }
+
+#ifdef __ICCRISCV__
+#ifdef interrupt
+#undef interrupt
+#endif
+#endif
+
 
 #endif
