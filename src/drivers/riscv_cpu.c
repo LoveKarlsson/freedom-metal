@@ -6,6 +6,12 @@
 #include <metal/shutdown.h>
 #include <metal/machine.h>
 
+#ifdef __ICCRISCV__
+#include "intrinsics.h"
+#include "csr.h"
+#define __asm__ asm
+#endif
+
 extern void __metal_vector_table();
 unsigned long long __metal_driver_cpu_mtime_get(struct metal_cpu *cpu);
 int __metal_driver_cpu_mtimecmp_set(struct metal_cpu *cpu, unsigned long long time);
@@ -20,9 +26,13 @@ struct metal_cpu *__metal_driver_cpu_get(int hartid)
 
 uintptr_t __metal_myhart_id (void)
 {
+#ifndef __ICCRISCV__
     uintptr_t myhart;
     __asm__ volatile ("csrr %0, mhartid" : "=r"(myhart));
     return myhart;
+#else
+    return __read_csr(_CSR_MHARTID);
+#endif    
 }
 
 void __metal_zero_memory (unsigned char *base, unsigned int size)
@@ -34,55 +44,95 @@ void __metal_zero_memory (unsigned char *base, unsigned int size)
 }
 
 void __metal_interrupt_global_enable (void) {
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrs %0, mstatus, %1" : "=r"(m) : "r"(METAL_MIE_INTERRUPT));
+#else
+    __set_bits_csr(_CSR_MSTATUS,METAL_MIE_INTERRUPT);
+#endif    
 }
 
 void __metal_interrupt_global_disable (void) {
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrc %0, mstatus, %1" : "=r"(m) : "r"(METAL_MIE_INTERRUPT));
+#else
+    __clear_bits_csr(_CSR_MSTATUS,METAL_MIE_INTERRUPT);
+#endif    
 }
 
 void __metal_interrupt_software_enable (void) {
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrs %0, mie, %1" : "=r"(m) : "r"(METAL_LOCAL_INTERRUPT_SW));
+#else
+    __set_bits_csr(_CSR_MIE,METAL_LOCAL_INTERRUPT_SW);
+#endif    
 }
 
 void __metal_interrupt_software_disable (void) {
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrc %0, mie, %1" : "=r"(m) : "r"(METAL_LOCAL_INTERRUPT_SW));
+#else
+    __clear_bits_csr(_CSR_MIE,METAL_LOCAL_INTERRUPT_SW);
+#endif    
 }
 
 void __metal_interrupt_timer_enable (void) {
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrs %0, mie, %1" : "=r"(m) : "r"(METAL_LOCAL_INTERRUPT_TMR));
+#else
+    __set_bits_csr(_CSR_MIE,METAL_LOCAL_INTERRUPT_TMR);
+#endif    
 }
 
 void __metal_interrupt_timer_disable (void) {
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrc %0, mie, %1" : "=r"(m) : "r"(METAL_LOCAL_INTERRUPT_TMR));
+#else
+    __clear_bits_csr(_CSR_MIE,METAL_LOCAL_INTERRUPT_EXT);
+#endif    
 }
 
 void __metal_interrupt_external_enable (void) {
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrs %0, mie, %1" : "=r"(m) : "r"(METAL_LOCAL_INTERRUPT_EXT));
+#else
+    __set_bits_csr(_CSR_MIE,METAL_LOCAL_INTERRUPT_EXT);
+#endif    
 }
 
 void __metal_interrupt_external_disable (void) {
+#ifndef __ICCRISCV__
     unsigned long m;
     __asm__ volatile ("csrrc %0, mie, %1" : "=r"(m) : "r"(METAL_LOCAL_INTERRUPT_EXT));
+#else
+    __clear_bits_csr(_CSR_MIE,METAL_LOCAL_INTERRUPT_EXT);
+#endif    
 }
 
 void __metal_interrupt_local_enable (int id) {
     uintptr_t b = 1 << id;
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrs %0, mie, %1" : "=r"(m) : "r"(b));
+#else
+    __set_bits_csr(_CSR_MIE,b);
+#endif    
 }
 
 void __metal_interrupt_local_disable (int id) {
     uintptr_t b = 1 << id;
+#ifndef __ICCRISCV__
     uintptr_t m;
     __asm__ volatile ("csrrc %0, mie, %1" : "=r"(m) : "r"(b));
+#else
+    __clear_bits_csr(_CSR_MIE,b);
+#endif    
 }
 
 void __metal_default_exception_handler (struct metal_cpu *cpu, int ecode) {

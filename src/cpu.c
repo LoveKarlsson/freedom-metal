@@ -7,6 +7,7 @@
 #ifdef __ICCRISCV__
 #include <csr.h>
 #include <intrinsics.h>
+#define __asm__ asm
 #endif
 
 struct metal_cpu* metal_cpu_get(unsigned int hartid)

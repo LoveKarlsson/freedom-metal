@@ -11,8 +11,19 @@
  *
  * Trigger a machine-mode trap with exception code ecode
  */
+#ifdef __IASMRISCV__
+      MODULE  ?trap
+
+      PUBLIC _metal_trap
+
+      SECTION `.text`:CODE:NOROOT(2)
+      CODE
+ /*.type _metal_trap, @function*/
+#else    
+ 
 .global _metal_trap
 .type _metal_trap, @function
+#endif
 
 _metal_trap:
 
@@ -50,4 +61,8 @@ _metal_trap:
 
     /* Jump to mtvec */
     jr t0
+
+#ifdef __IASMRISCV__
+    END
+#endif
 
