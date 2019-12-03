@@ -120,7 +120,11 @@ static void pre_rate_change_callback_func(void *priv)
     long cycles_to_wait = bits_per_symbol * clk_freq / uart->baud_rate;
 
     for(volatile long x = 0; x < cycles_to_wait; x++)
+#ifndef __ICCRISCV__      
         __asm__("nop");
+#else
+        __no_operation();
+#endif        
 }
 
 static void post_rate_change_callback_func(void *priv)
