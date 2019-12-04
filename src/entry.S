@@ -183,8 +183,8 @@ l1:
     /* At this point we can enter the C runtime's startup file.  The arguments
      * to this function are designed to match those provided to the SEE, just
      * so we don't have to write another ABI. */
-        EXTERN __iar_program_start
-        call   __iar_program_start
+        EXTERN __iar_program_start_metal
+        call   __iar_program_start_metal
 
     /* If we've made it back here then there's probably something wrong.  We
      * allow the METAL to register a handler here. */
