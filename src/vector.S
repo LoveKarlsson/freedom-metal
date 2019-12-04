@@ -30,9 +30,9 @@
   PUBLIC  __metal_vector_table
   
 #if __riscv_xlen == 32
-      SECTION `.text`:CODE:NOROOT(7)
+      SECTION `.mintvec.metal`:CODE:NOROOT(7)
 #else
-      SECTION `.text`:CODE:NOROOT(8)
+      SECTION `.mintvec.metal`:CODE:NOROOT(8)
 #endif
   
 #else
