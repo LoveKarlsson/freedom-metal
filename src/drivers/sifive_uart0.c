@@ -8,6 +8,10 @@
 #include <metal/drivers/sifive_uart0.h>
 #include <metal/machine.h>
 
+#ifdef __ICCRISCV__      
+#include "intrinsics.h"
+#endif
+
 /* TXDATA Fields */
 #define UART_TXEN               (1 <<  0)
 #define UART_TXFULL             (1 << 31)

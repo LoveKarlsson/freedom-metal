@@ -1169,13 +1169,21 @@ int  __metal_driver_cpu_get_instruction_length(struct metal_cpu *cpu, uintptr_t 
 uintptr_t  __metal_driver_cpu_get_exception_pc(struct metal_cpu *cpu)
 {
     uintptr_t mepc;
+#ifndef __ICCRISCV__
     __asm__ volatile ("csrr %0, mepc" : "=r"(mepc));
+#else
+    mepc = __read_csr(_CSR_MEPC);
+#endif    
     return mepc;
 }
 
 int  __metal_driver_cpu_set_exception_pc(struct metal_cpu *cpu, uintptr_t mepc)
 {
+#ifndef __ICCRISCV__
     __asm__ volatile ("csrw mepc, %0" :: "r"(mepc));
+#else
+    __write_csr(_CSR_MEPC, mepc);
+#endif    
     return 0;
 }
 
