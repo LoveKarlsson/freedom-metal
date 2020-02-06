@@ -185,9 +185,9 @@ long __metal_driver_sifive_fe310_g000_pll_get_rate_hz(const struct metal_clock *
 {
     struct metal_clock *pllref = __metal_driver_sifive_fe310_g000_pll_pllref(clock);
     struct metal_clock *pllsel0 = __metal_driver_sifive_fe310_g000_pll_pllsel0(clock);
-    long config_offset = __metal_driver_sifive_fe310_g000_pll_config_offset(clock);
+    long config_offset = __metal_driver_sifive_fe310_g000_pll_config_offset();
     struct __metal_driver_sifive_fe310_g000_prci *config_base =
-      __metal_driver_sifive_fe310_g000_pll_config_base(clock);
+      __metal_driver_sifive_fe310_g000_pll_config_base();
     long divider_offset = __metal_driver_sifive_fe310_g000_pll_divider_offset(clock);
     struct __metal_driver_sifive_fe310_g000_prci *divider_base =
       __metal_driver_sifive_fe310_g000_pll_divider_base(clock);
@@ -298,7 +298,7 @@ long __metal_driver_sifive_fe310_g000_pll_set_rate_hz(struct metal_clock *clock,
 {
     struct metal_clock *pllref = __metal_driver_sifive_fe310_g000_pll_pllref(clock);
     struct metal_clock *pllsel0 = __metal_driver_sifive_fe310_g000_pll_pllsel0(clock);
-    long config_offset = __metal_driver_sifive_fe310_g000_pll_config_offset(clock);
+    long config_offset = __metal_driver_sifive_fe310_g000_pll_config_offset();
     long divider_offset = __metal_driver_sifive_fe310_g000_pll_divider_offset(clock);
     long base = __metal_driver_sifive_fe310_g000_prci_base();
 
