@@ -1,9 +1,7 @@
 /* Copyright 2018 SiFive, Inc */
 /* SPDX-License-Identifier: Apache-2.0 */
 
-#ifdef __ICCRISCV__
-#include <time.h>
-#else
+#ifndef __IAR_SYSTEMS_ICC__
 #include <sys/time.h>
 #include <sys/times.h>
 #endif
@@ -67,6 +65,15 @@ int nop_timebase(unsigned long long *t) __attribute__((section(".text.metal.nop.
 int nop_timebase(unsigned long long *t) { return -1; }
 int nop_tick(int second) __attribute__((section(".text.metal.nop.tick")));
 int nop_tick(int second) { return -1; }
+
+#ifdef __IAR_SYSTEMS_ICC__
+int metal_timer_get_cyclecount(int hartid, unsigned long long *c);
+#pragma weak metal_timer_get_cyclecount = nop_cyclecount
+int metal_timer_get_timebase_frequency(unsigned long long *t);
+#pragma weak metal_timer_get_timebase_frequency = nop_timebase
+int metal_timer_set_tick(int second);
+#pragma weak metal_timer_set_tick = nop_tick
+#else
 int metal_timer_get_cyclecount(int hartid, unsigned long long *c) __attribute__((weak, alias("nop_cyclecount")))
 {
 #pragma message("There is no default timer device, metal_timer_get_cyclecount() will always return cyclecount -1.")
@@ -79,6 +86,7 @@ int metal_timer_set_tick(int second) __attribute__((weak, alias("nop_tick")))
 {
 #pragma message("There is no default timer device, metal_timer_set_tick) will always return -1.")
 }
+#endif
 
 #endif
 
