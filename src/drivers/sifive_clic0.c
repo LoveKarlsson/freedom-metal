@@ -453,7 +453,11 @@ void __metal_driver_sifive_clic0_init (struct metal_interrupt *controller)
 
         level = (1 << cfg.nlbits) - 1;
 	num_subinterrupts = __metal_driver_sifive_clic0_num_subinterrupts(controller);
-        clic->metal_mtvt_table[0] = &__metal_clic0_handler;
+        clic->metal_mtvt_table[0] = 
+#ifdef __IAR_SYSTEMS_ICC__
+(metal_interrupt_vector_handler_t)
+#endif
+          &__metal_clic0_handler;
         for (int i = 1; i < num_subinterrupts; i++) {
             clic->metal_mtvt_table[i] = NULL;
             clic->metal_exint_table[i].handler = NULL;
