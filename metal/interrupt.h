@@ -250,7 +250,7 @@ __inline__ int metal_interrupt_disable(struct metal_interrupt *controller, int i
  * @param threshold The interrupt threshold level
  * @return 0 upon success
  */
-inline int metal_interrupt_set_threshold(struct metal_interrupt *controller, unsigned int level)
+__inline__ int metal_interrupt_set_threshold(struct metal_interrupt *controller, unsigned int level)
 {
     return controller->vtable->interrupt_set_threshold(controller, level);
 }
@@ -260,7 +260,7 @@ inline int metal_interrupt_set_threshold(struct metal_interrupt *controller, uns
  * @param controller The handle for the interrupt controller
  * @return The interrupt threshold level
  */
-inline unsigned int metal_interrupt_get_threshold(struct metal_interrupt *controller)
+__inline__ unsigned int metal_interrupt_get_threshold(struct metal_interrupt *controller)
 {
   return controller->vtable->interrupt_get_threshold(controller);
 }
@@ -272,7 +272,7 @@ inline unsigned int metal_interrupt_get_threshold(struct metal_interrupt *contro
  * @param priority The interrupt priority level
  * @return 0 upon success
  */
-inline int metal_interrupt_set_priority(struct metal_interrupt *controller,
+__inline__ int metal_interrupt_set_priority(struct metal_interrupt *controller,
 					int id, unsigned int priority)
 {
     return controller->vtable->interrupt_set_priority(controller, id, priority);
@@ -284,7 +284,7 @@ inline int metal_interrupt_set_priority(struct metal_interrupt *controller,
  * @param id The interrupt ID to enable
  * @return The interrupt priority level
  */
-inline unsigned int metal_interrupt_get_priority(struct metal_interrupt *controller, int id)
+__inline__ unsigned int metal_interrupt_get_priority(struct metal_interrupt *controller, int id)
 {
   return controller->vtable->interrupt_get_priority(controller, id);
 }

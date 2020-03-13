@@ -5,10 +5,6 @@
 
 #include <metal/privilege.h>
 
-#ifdef __ICCRISCV__
-#define __asm__ asm
-#endif
-
 #define METAL_MSTATUS_MIE_OFFSET	3
 #define METAL_MSTATUS_MPIE_OFFSET	7
 #define METAL_MSTATUS_SIE_OFFSET	1
