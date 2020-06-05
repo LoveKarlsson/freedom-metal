@@ -30,9 +30,11 @@ const struct __metal_clic_cfg __metal_clic_defaultcfg = {
             };
 
 void __metal_clic0_handler(int id, void *priv) __attribute__((aligned(64)));
-
+#ifndef __IAR_SYSTEMS_ICC__
 void __metal_clic0_default_vector_handler (void) __attribute__((interrupt, aligned(64)));
-
+#else
+__interrupt void __metal_clic0_default_vector_handler (void);
+#endif
 struct __metal_clic_cfg __metal_clic0_configuration (struct __metal_driver_sifive_clic0 *clic,
                                                  struct __metal_clic_cfg *cfg)
 {
@@ -415,6 +417,9 @@ void __metal_clic0_default_handler (int id, void *priv) {
     metal_shutdown(300);
 }
 
+#ifdef __IAR_SYSTEMS_ICC__
+__interrupt
+#endif
 void __metal_clic0_default_vector_handler (void) {
     metal_shutdown(400);
 }
@@ -537,7 +542,7 @@ int __metal_driver_sifive_clic0_vector_register (struct metal_interrupt *control
             clic->metal_mtvt_table[id] = isr;
             clic->metal_exint_table[id].exint_data = priv;        
         } else {
-            clic->metal_mtvt_table[id] = __metal_clic0_default_vector_handler;
+            clic->metal_mtvt_table[id] = (metal_interrupt_vector_handler_t) __metal_clic0_default_vector_handler;
             clic->metal_exint_table[id].sub_int = priv;
         }
         rc = 0;

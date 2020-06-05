@@ -31,6 +31,17 @@ __METAL_DECLARE_VTABLE(__metal_driver_vtable_sifive_clic0)
 
 #define __METAL_MACHINE_MACROS
 #include <metal/machine.h>
+#ifdef __IAR_SYSTEMS_ICC__
+struct __metal_driver_sifive_clic0 {
+    struct metal_interrupt controller;
+    int init_done;
+    struct {
+      char __dummy;
+    } __attribute__((aligned(64)));
+    metal_interrupt_vector_handler_t metal_mtvt_table[__METAL_CLIC_SUBINTERRUPTS];
+    __metal_interrupt_data metal_exint_table[__METAL_CLIC_SUBINTERRUPTS];
+};
+#else
 struct __metal_driver_sifive_clic0 {
     struct metal_interrupt controller;
     int init_done;
@@ -39,6 +50,7 @@ struct __metal_driver_sifive_clic0 {
     metal_interrupt_vector_handler_t metal_mtvt_table[__METAL_CLIC_SUBINTERRUPTS];
     __metal_interrupt_data metal_exint_table[__METAL_CLIC_SUBINTERRUPTS];
 };
+#endif
 #undef __METAL_MACHINE_MACROS
 
 #endif
